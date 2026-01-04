@@ -124,4 +124,12 @@
   .nav-link.active {
     @apply text-primary border-b-2 border-primary;
   }
+
+  .nav-link-mobile {
+    @apply text-muted-foreground hover:text-foreground transition-colors font-medium text-base py-3 px-4 rounded-lg hover:bg-muted block;
+  }
+
+  .nav-link-mobile.active {
+    @apply text-primary bg-primary/10;
+  }
 }

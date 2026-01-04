@@ -127,8 +127,8 @@ export type MovieWithCollections = Movie & {
 };
 
 export type LoginRequest = {
-  email: text;
-  password: text;
+  email: string;
+  password: string;
 };
 
 export type AuthResponse = {

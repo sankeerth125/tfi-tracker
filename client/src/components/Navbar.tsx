@@ -6,16 +6,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useLogout, useUser } from "@/hooks/use-auth";
 import {
   Crown,
   Film,
   LogOut,
+  Menu,
   Moon,
   ShieldCheck,
   Sun,
   User,
 } from "lucide-react";
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
 
 export function Navbar() {
@@ -23,6 +26,7 @@ export function Navbar() {
   const { data: user } = useUser();
   const { mutate: logout } = useLogout();
   const { theme, toggleTheme } = useTheme();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => location === path;
 
@@ -84,6 +88,57 @@ export function Navbar() {
               <Sun className="h-4 w-4" />
             )}
           </Button>
+
+          {/* Mobile Menu */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="sm" className="md:hidden">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-64">
+              <div className="flex flex-col gap-4 mt-8">
+                <Link
+                  href="/"
+                  className={`nav-link-mobile ${isActive("/") ? "active" : ""}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/compare"
+                  className={`nav-link-mobile ${
+                    isActive("/compare") ? "active" : ""
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Compare
+                </Link>
+                <Link
+                  href="/verdict-rules"
+                  className={`nav-link-mobile ${
+                    isActive("/verdict-rules") ? "active" : ""
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Verdict Rules
+                </Link>
+                <Link
+                  href="/pro"
+                  className={`nav-link-mobile ${
+                    isActive("/pro") ? "active" : ""
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="flex items-center gap-2">
+                    <Crown className="w-4 h-4 text-yellow-500" />
+                    Pro
+                  </span>
+                </Link>
+              </div>
+            </SheetContent>
+          </Sheet>
+
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

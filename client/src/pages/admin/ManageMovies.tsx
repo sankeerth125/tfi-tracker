@@ -231,68 +231,122 @@ export default function ManageMovies() {
       </div>
 
       <div className="bg-card rounded-xl border shadow-sm">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Release Date</TableHead>
-              <TableHead>Budget</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
+        {/* Desktop Table */}
+        <div className="hidden md:block">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8">
-                  Loading...
-                </TableCell>
+                <TableHead>Title</TableHead>
+                <TableHead>Release Date</TableHead>
+                <TableHead>Budget</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
-            ) : (
-              movies?.map((movie) => (
-                <TableRow key={movie.id}>
-                  <TableCell className="font-medium">{movie.title}</TableCell>
-                  <TableCell>
-                    {new Date(movie.releaseDate).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>₹{movie.budget}Cr</TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs border ${
-                        movie.status === "Running"
-                          ? "bg-green-100 text-green-700 border-green-200"
-                          : "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {movie.status}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex gap-2 justify-end">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEdit(movie)}
-                        className="gap-2"
-                      >
-                        <Edit className="w-4 h-4" /> Edit
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(movie)}
-                        disabled={isDeleting}
-                        className="gap-2 text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="w-4 h-4" /> Delete
-                      </Button>
-                    </div>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8">
+                    Loading...
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : (
+                movies?.map((movie) => (
+                  <TableRow key={movie.id}>
+                    <TableCell className="font-medium">{movie.title}</TableCell>
+                    <TableCell>
+                      {new Date(movie.releaseDate).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>₹{movie.budget}Cr</TableCell>
+                    <TableCell>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs border ${
+                          movie.status === "Running"
+                            ? "bg-green-100 text-green-700 border-green-200"
+                            : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
+                        {movie.status}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEdit(movie)}
+                          className="gap-2"
+                        >
+                          <Edit className="w-4 h-4" /> Edit
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(movie)}
+                          disabled={isDeleting}
+                          className="gap-2 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" /> Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Mobile Card Layout */}
+        <div className="md:hidden space-y-4 p-4">
+          {isLoading ? (
+            <div className="text-center py-8">Loading...</div>
+          ) : (
+            movies?.map((movie) => (
+              <div key={movie.id} className="bg-muted/20 p-4 rounded-lg border">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex-1">
+                    <h3 className="font-medium text-lg">{movie.title}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(movie.releaseDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <span
+                    className={`px-2 py-0.5 rounded text-xs border ${
+                      movie.status === "Running"
+                        ? "bg-green-100 text-green-700 border-green-200"
+                        : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    {movie.status}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium">₹{movie.budget}Cr</span>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEdit(movie)}
+                      className="gap-1"
+                    >
+                      <Edit className="w-3 h-3" /> Edit
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDelete(movie)}
+                      disabled={isDeleting}
+                      className="gap-1 text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="w-3 h-3" /> Delete
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </AdminLayout>
   );

@@ -20,13 +20,13 @@ interface Movie {
   title: string;
   posterUrl: string;
   releaseDate: string;
-  budget: number;
-  hero?: string;
-  director?: string;
-  verdict: string;
-  status: string;
-  notes: string;
-  createdAt: string;
+  budget: number | null;
+  hero: string | null;
+  director: string | null;
+  verdict: string | null;
+  status: string | null;
+  notes: string | null;
+  createdAt: Date | null;
 }
 
 interface MovieSelectorProps {
