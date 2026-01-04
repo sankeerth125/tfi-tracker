@@ -1,9 +1,5 @@
-import {
-  api,
-  buildUrl,
-  type InsertCollection,
-  type InsertMovie,
-} from "@shared/routes";
+import { api, buildUrl } from "@shared/routes";
+import { type InsertCollection, type InsertMovie } from "@shared/schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useMovies() {
@@ -132,6 +128,30 @@ export function useAddCollection() {
       queryClient.invalidateQueries({
         queryKey: [api.movies.getCollections.path, variables.movieId],
       });
+      queryClient.invalidateQueries({ queryKey: [api.movies.list.path] });
+    },
+  });
+}
+
+export function useDeleteMovie() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(
+        api.admin.deleteMovie.path.replace(":id", id.toString()),
+        {
+          method: api.admin.deleteMovie.method,
+          credentials: "include",
+        }
+      );
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("Unauthorized");
+        if (res.status === 404) throw new Error("Movie not found");
+        throw new Error("Failed to delete movie");
+      }
+      return api.admin.deleteMovie.responses[200].parse(await res.json());
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [api.movies.list.path] });
     },
   });

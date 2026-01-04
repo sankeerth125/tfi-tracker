@@ -191,6 +191,21 @@ export async function registerRoutes(
     }
   });
 
+  app.delete(api.admin.deleteMovie.path, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const movie = await storage.getMovie(parseInt(id));
+      if (!movie) {
+        return res.status(404).json({ message: "Movie not found" });
+      }
+      // Note: In a real app, you might want to soft delete or check for dependencies
+      await storage.deleteMovie(parseInt(id));
+      res.status(200).json({ message: "Movie deleted successfully" });
+    } catch (err) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
   app.post(api.admin.addCollection.path, isAdmin, async (req, res) => {
     try {
       const input = api.admin.addCollection.input.parse(req.body);

@@ -169,6 +169,15 @@ export const api = {
         404: errorSchemas.notFound,
       },
     },
+    deleteMovie: {
+      method: "DELETE" as const,
+      path: "/api/admin/movies/:id",
+      responses: {
+        200: z.object({ message: z.string() }),
+        401: errorSchemas.unauthorized,
+        404: errorSchemas.notFound,
+      },
+    },
     addCollection: {
       method: "POST" as const,
       path: "/api/admin/collections",

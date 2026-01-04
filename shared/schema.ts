@@ -1,4 +1,13 @@
-import { pgTable, text, serial, integer, boolean, timestamp, date, jsonb } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  date,
+  integer,
+  jsonb,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -19,6 +28,8 @@ export const movies = pgTable("movies", {
   posterUrl: text("poster_url").notNull(),
   releaseDate: date("release_date").notNull(),
   budget: integer("budget"), // in Crores
+  hero: text("hero"), // Lead actor
+  director: text("director"), // Movie director
   verdict: text("verdict").default("Pending"), // Blockbuster, Super Hit, Hit, Average, Flop, Disaster
   status: text("status").default("Running"), // Running, Dropping, Dead
   notes: text("notes"),
@@ -36,13 +47,19 @@ export const actors = pgTable("actors", {
 
 export const movieCast = pgTable("movie_cast", {
   id: serial("id").primaryKey(),
-  movieId: integer("movie_id").references(() => movies.id).notNull(),
-  actorId: integer("actor_id").references(() => actors.id).notNull(),
+  movieId: integer("movie_id")
+    .references(() => movies.id)
+    .notNull(),
+  actorId: integer("actor_id")
+    .references(() => actors.id)
+    .notNull(),
 });
 
 export const collections = pgTable("collections", {
   id: serial("id").primaryKey(),
-  movieId: integer("movie_id").references(() => movies.id).notNull(),
+  movieId: integer("movie_id")
+    .references(() => movies.id)
+    .notNull(),
   dayNumber: integer("day_number").notNull(),
   collectionDate: date("collection_date").notNull(),
   indiaGross: integer("india_gross").default(0),
@@ -54,23 +71,37 @@ export const collections = pgTable("collections", {
 
 export const regionalCollections = pgTable("regional_collections", {
   id: serial("id").primaryKey(),
-  movieId: integer("movie_id").references(() => movies.id).notNull(),
+  movieId: integer("movie_id")
+    .references(() => movies.id)
+    .notNull(),
   region: text("region").notNull(), // Nizam, Ceded, Uttarandhra, Guntur, East Godavari, West Godavari, Krishna, Nellore
   gross: integer("gross").default(0),
   share: integer("share").default(0),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const tradeDisclaimer = text("trade_disclaimer").default("Box office data is based on various trade sources and resources. Figures are approximate.");
+export const tradeDisclaimer = text("trade_disclaimer").default(
+  "Box office data is based on various trade sources and resources. Figures are approximate."
+);
 
 // === RELATIONS (Implicit in Drizzle, explicit types helper) ===
 
 // === BASE SCHEMAS ===
-export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true });
-export const insertMovieSchema = createInsertSchema(movies).omit({ id: true, createdAt: true });
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  createdAt: true,
+});
+export const insertMovieSchema = createInsertSchema(movies).omit({
+  id: true,
+  createdAt: true,
+});
 export const insertActorSchema = createInsertSchema(actors).omit({ id: true });
-export const insertCollectionSchema = createInsertSchema(collections).omit({ id: true });
-export const insertRegionalCollectionSchema = createInsertSchema(regionalCollections).omit({ id: true, updatedAt: true });
+export const insertCollectionSchema = createInsertSchema(collections).omit({
+  id: true,
+});
+export const insertRegionalCollectionSchema = createInsertSchema(
+  regionalCollections
+).omit({ id: true, updatedAt: true });
 
 // === EXPLICIT API CONTRACT TYPES ===
 export type User = typeof users.$inferSelect;
@@ -86,7 +117,9 @@ export type Collection = typeof collections.$inferSelect;
 export type InsertCollection = z.infer<typeof insertCollectionSchema>;
 
 export type RegionalCollection = typeof regionalCollections.$inferSelect;
-export type InsertRegionalCollection = z.infer<typeof insertRegionalCollectionSchema>;
+export type InsertRegionalCollection = z.infer<
+  typeof insertRegionalCollectionSchema
+>;
 
 // API Types
 export type MovieWithCollections = Movie & {

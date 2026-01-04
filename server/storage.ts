@@ -30,6 +30,7 @@ export interface IStorage {
   getMovie(id: number): Promise<Movie | undefined>;
   createMovie(movie: InsertMovie): Promise<Movie>;
   updateMovie(id: number, movie: Partial<InsertMovie>): Promise<Movie>;
+  deleteMovie(id: number): Promise<void>;
 
   // Actors
   getActors(): Promise<Actor[]>;
@@ -100,6 +101,10 @@ export class DatabaseStorage implements IStorage {
       .where(eq(movies.id, id))
       .returning();
     return movie;
+  }
+
+  async deleteMovie(id: number): Promise<void> {
+    await db.delete(movies).where(eq(movies.id, id));
   }
 
   // Actors

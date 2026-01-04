@@ -17,15 +17,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useCreateMovie, useMovies, useUpdateMovie } from "@/hooks/use-movies";
+import {
+  useCreateMovie,
+  useDeleteMovie,
+  useMovies,
+  useUpdateMovie,
+} from "@/hooks/use-movies";
 import { useToast } from "@/hooks/use-toast";
-import { Edit, Plus } from "lucide-react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 export default function ManageMovies() {
   const { data: movies, isLoading } = useMovies();
   const { mutate: createMovie, isPending } = useCreateMovie();
   const { mutate: updateMovie, isPending: isUpdating } = useUpdateMovie();
+  const { mutate: deleteMovie, isPending: isDeleting } = useDeleteMovie();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [editingMovie, setEditingMovie] = useState<any>(null);
@@ -39,6 +45,8 @@ export default function ManageMovies() {
       posterUrl: formData.get("posterUrl") as string,
       releaseDate: formData.get("releaseDate") as string,
       budget: Number(formData.get("budget")),
+      hero: formData.get("hero") as string,
+      director: formData.get("director") as string,
       verdict: "Pending",
       status: "Running",
       notes: "",
@@ -85,6 +93,26 @@ export default function ManageMovies() {
   const handleEdit = (movie: any) => {
     setEditingMovie(movie);
     setOpen(true);
+  };
+
+  const handleDelete = (movie: any) => {
+    if (confirm(`Are you sure you want to delete "${movie.title}"?`)) {
+      deleteMovie(movie.id, {
+        onSuccess: () => {
+          toast({
+            title: "Success",
+            description: "Movie deleted successfully",
+          });
+        },
+        onError: (err) => {
+          toast({
+            title: "Error",
+            description: err.message,
+            variant: "destructive",
+          });
+        },
+      });
+    }
   };
 
   const handleDialogClose = () => {
@@ -164,6 +192,26 @@ export default function ManageMovies() {
                   />
                 </div>
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="hero">Hero/Lead Actor</Label>
+                  <Input
+                    id="hero"
+                    name="hero"
+                    placeholder="e.g. Allu Arjun"
+                    defaultValue={editingMovie?.hero || ""}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="director">Director</Label>
+                  <Input
+                    id="director"
+                    name="director"
+                    placeholder="e.g. Sukumar"
+                    defaultValue={editingMovie?.director || ""}
+                  />
+                </div>
+              </div>
               <Button
                 type="submit"
                 className="w-full"
@@ -220,14 +268,25 @@ export default function ManageMovies() {
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleEdit(movie)}
-                      className="gap-2"
-                    >
-                      <Edit className="w-4 h-4" /> Edit
-                    </Button>
+                    <div className="flex gap-2 justify-end">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEdit(movie)}
+                        className="gap-2"
+                      >
+                        <Edit className="w-4 h-4" /> Edit
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDelete(movie)}
+                        disabled={isDeleting}
+                        className="gap-2 text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="w-4 h-4" /> Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
