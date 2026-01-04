@@ -1,5 +1,12 @@
-import { z } from 'zod';
-import { insertUserSchema, insertMovieSchema, insertActorSchema, insertCollectionSchema, movies, actors, collections } from './schema';
+import { z } from "zod";
+import {
+  actors,
+  collections,
+  insertCollectionSchema,
+  insertMovieSchema,
+  movies,
+  regionalCollections,
+} from "./schema";
 
 export const errorSchemas = {
   validation: z.object({
@@ -21,30 +28,30 @@ export const api = {
   // Public Routes
   movies: {
     list: {
-      method: 'GET' as const,
-      path: '/api/movies',
+      method: "GET" as const,
+      path: "/api/movies",
       responses: {
         200: z.array(z.custom<typeof movies.$inferSelect>()),
       },
     },
     get: {
-      method: 'GET' as const,
-      path: '/api/movies/:id',
+      method: "GET" as const,
+      path: "/api/movies/:id",
       responses: {
         200: z.custom<typeof movies.$inferSelect>(),
         404: errorSchemas.notFound,
       },
     },
     getCollections: {
-      method: 'GET' as const,
-      path: '/api/movies/:id/collections',
+      method: "GET" as const,
+      path: "/api/movies/:id/collections",
       responses: {
         200: z.array(z.custom<typeof collections.$inferSelect>()),
       },
     },
     getRegionalCollections: {
-      method: 'GET' as const,
-      path: '/api/movies/:id/regional',
+      method: "GET" as const,
+      path: "/api/movies/:id/regional",
       responses: {
         200: z.array(z.custom<typeof regionalCollections.$inferSelect>()),
       },
@@ -52,15 +59,15 @@ export const api = {
   },
   actors: {
     list: {
-      method: 'GET' as const,
-      path: '/api/actors',
+      method: "GET" as const,
+      path: "/api/actors",
       responses: {
         200: z.array(z.custom<typeof actors.$inferSelect>()),
       },
     },
     get: {
-      method: 'GET' as const,
-      path: '/api/actors/:id',
+      method: "GET" as const,
+      path: "/api/actors/:id",
       responses: {
         200: z.custom<typeof actors.$inferSelect>(),
         404: errorSchemas.notFound,
@@ -70,8 +77,8 @@ export const api = {
   // Auth Routes (Mocked)
   auth: {
     signup: {
-      method: 'POST' as const,
-      path: '/api/auth/signup',
+      method: "POST" as const,
+      path: "/api/auth/signup",
       input: z.object({
         email: z.string().email(),
         password: z.string().min(6),
@@ -89,8 +96,8 @@ export const api = {
       },
     },
     login: {
-      method: 'POST' as const,
-      path: '/api/auth/login',
+      method: "POST" as const,
+      path: "/api/auth/login",
       input: z.object({
         email: z.string().email(),
         password: z.string(),
@@ -108,30 +115,32 @@ export const api = {
       },
     },
     logout: {
-      method: 'POST' as const,
-      path: '/api/auth/logout',
+      method: "POST" as const,
+      path: "/api/auth/logout",
       responses: {
         200: z.object({ message: z.string() }),
       },
     },
     me: {
-        method: 'GET' as const,
-        path: '/api/auth/me',
-        responses: {
-            200: z.object({
-                id: z.number(),
-                email: z.string(),
-                role: z.string(),
-                isPro: z.boolean(),
-            }).nullable(),
-        }
-    }
+      method: "GET" as const,
+      path: "/api/auth/me",
+      responses: {
+        200: z
+          .object({
+            id: z.number(),
+            email: z.string(),
+            role: z.string(),
+            isPro: z.boolean(),
+          })
+          .nullable(),
+      },
+    },
   },
   // Pro/Subscription
   subscription: {
     upgrade: {
-      method: 'POST' as const,
-      path: '/api/subscription/upgrade',
+      method: "POST" as const,
+      path: "/api/subscription/upgrade",
       responses: {
         200: z.object({ success: z.boolean(), message: z.string() }),
       },
@@ -140,8 +149,8 @@ export const api = {
   // Admin Routes (Internal)
   admin: {
     createMovie: {
-      method: 'POST' as const,
-      path: '/api/admin/movies',
+      method: "POST" as const,
+      path: "/api/admin/movies",
       input: insertMovieSchema,
       responses: {
         201: z.custom<typeof movies.$inferSelect>(),
@@ -149,9 +158,20 @@ export const api = {
         401: errorSchemas.unauthorized,
       },
     },
+    updateMovie: {
+      method: "PUT" as const,
+      path: "/api/admin/movies/:id",
+      input: insertMovieSchema.partial(),
+      responses: {
+        200: z.custom<typeof movies.$inferSelect>(),
+        400: errorSchemas.validation,
+        401: errorSchemas.unauthorized,
+        404: errorSchemas.notFound,
+      },
+    },
     addCollection: {
-      method: 'POST' as const,
-      path: '/api/admin/collections',
+      method: "POST" as const,
+      path: "/api/admin/collections",
       input: insertCollectionSchema,
       responses: {
         201: z.custom<typeof collections.$inferSelect>(),
@@ -162,7 +182,10 @@ export const api = {
   },
 };
 
-export function buildUrl(path: string, params?: Record<string, string | number>): string {
+export function buildUrl(
+  path: string,
+  params?: Record<string, string | number>
+): string {
   let url = path;
   if (params) {
     Object.entries(params).forEach(([key, value]) => {

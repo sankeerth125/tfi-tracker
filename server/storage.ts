@@ -29,6 +29,7 @@ export interface IStorage {
   getMovies(): Promise<Movie[]>;
   getMovie(id: number): Promise<Movie | undefined>;
   createMovie(movie: InsertMovie): Promise<Movie>;
+  updateMovie(id: number, movie: Partial<InsertMovie>): Promise<Movie>;
 
   // Actors
   getActors(): Promise<Actor[]>;
@@ -86,6 +87,18 @@ export class DatabaseStorage implements IStorage {
 
   async createMovie(insertMovie: InsertMovie): Promise<Movie> {
     const [movie] = await db.insert(movies).values(insertMovie).returning();
+    return movie;
+  }
+
+  async updateMovie(
+    id: number,
+    updateMovie: Partial<InsertMovie>
+  ): Promise<Movie> {
+    const [movie] = await db
+      .update(movies)
+      .set(updateMovie)
+      .where(eq(movies.id, id))
+      .returning();
     return movie;
   }
 

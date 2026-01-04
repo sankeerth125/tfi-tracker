@@ -13,6 +13,17 @@ declare module "http" {
   }
 }
 
+declare module "express-session" {
+  interface SessionData {
+    user?: {
+      id: number;
+      email: string;
+      role: string;
+      isPro: boolean;
+    };
+  }
+}
+
 app.use(
   express.json({
     verify: (req, _res, buf) => {

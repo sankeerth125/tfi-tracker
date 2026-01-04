@@ -1,43 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Oswald', sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Oswald", sans-serif;
 
   /* Neutral, professional palette */
   --background: 220 14% 96%;
   --foreground: 220 10% 10%;
-  
+
   --card: 0 0% 100%;
   --card-foreground: 220 10% 10%;
-  
+
   --popover: 0 0% 100%;
   --popover-foreground: 220 10% 10%;
-  
+
   --primary: 220 10% 10%; /* Dark Charcoal */
   --primary-foreground: 0 0% 100%;
-  
+
   --secondary: 220 14% 90%;
   --secondary-foreground: 220 10% 10%;
-  
+
   --muted: 220 14% 94%;
   --muted-foreground: 220 10% 45%;
-  
+
   --accent: 142 70% 45%; /* Success Green - Used for 'Hit' */
   --accent-foreground: 0 0% 100%;
-  
+
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
 
   --border: 220 13% 90%;
   --input: 220 13% 90%;
   --ring: 220 10% 10%;
-  
+
   --radius: 0.5rem;
+}
+
+.dark {
+  /* Dark theme colors */
+  --background: 220 15% 8%;
+  --foreground: 220 10% 95%;
+
+  --card: 220 15% 12%;
+  --card-foreground: 220 10% 95%;
+
+  --popover: 220 15% 12%;
+  --popover-foreground: 220 10% 95%;
+
+  --primary: 220 10% 95%;
+  --primary-foreground: 220 15% 8%;
+
+  --secondary: 220 15% 15%;
+  --secondary-foreground: 220 10% 95%;
+
+  --muted: 220 15% 20%;
+  --muted-foreground: 220 10% 65%;
+
+  --accent: 142 70% 55%;
+  --accent-foreground: 220 15% 8%;
+
+  --destructive: 0 84% 65%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 220 15% 20%;
+  --input: 220 15% 20%;
+  --ring: 220 10% 95%;
 }
 
 @layer base {
@@ -47,7 +78,12 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display tracking-wide;
   }
 }
@@ -56,27 +92,27 @@
   .dashboard-card {
     @apply bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-300;
   }
-  
+
   .badge-blockbuster {
     @apply bg-yellow-500 text-white border-yellow-600;
   }
-  
+
   .badge-superhit {
     @apply bg-green-600 text-white border-green-700;
   }
-  
+
   .badge-hit {
     @apply bg-green-500 text-white border-green-600;
   }
-  
+
   .badge-average {
     @apply bg-yellow-400 text-black border-yellow-500;
   }
-  
+
   .badge-flop {
     @apply bg-orange-500 text-white border-orange-600;
   }
-  
+
   .badge-disaster {
     @apply bg-red-600 text-white border-red-700;
   }
