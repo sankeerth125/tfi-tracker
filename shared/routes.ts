@@ -42,6 +42,13 @@ export const api = {
         200: z.array(z.custom<typeof collections.$inferSelect>()),
       },
     },
+    getRegionalCollections: {
+      method: 'GET' as const,
+      path: '/api/movies/:id/regional',
+      responses: {
+        200: z.array(z.custom<typeof regionalCollections.$inferSelect>()),
+      },
+    },
   },
   actors: {
     list: {

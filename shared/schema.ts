@@ -49,7 +49,19 @@ export const collections = pgTable("collections", {
   overseasGross: integer("overseas_gross").default(0),
   totalGross: integer("total_gross").default(0), // Calculated/Stored for ease
   trendDirection: text("trend_direction"), // 'up', 'down', 'flat'
+  regionalData: jsonb("regional_data"), // { nizam: number, ceded: number, uttarandhra: number, guntur: number, eastGodavari: number, westGodavari: number, krishna: number, nellore: number }
 });
+
+export const regionalCollections = pgTable("regional_collections", {
+  id: serial("id").primaryKey(),
+  movieId: integer("movie_id").references(() => movies.id).notNull(),
+  region: text("region").notNull(), // Nizam, Ceded, Uttarandhra, Guntur, East Godavari, West Godavari, Krishna, Nellore
+  gross: integer("gross").default(0),
+  share: integer("share").default(0),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const tradeDisclaimer = text("trade_disclaimer").default("Box office data is based on various trade sources and resources. Figures are approximate.");
 
 // === RELATIONS (Implicit in Drizzle, explicit types helper) ===
 
@@ -58,6 +70,7 @@ export const insertUserSchema = createInsertSchema(users).omit({ id: true, creat
 export const insertMovieSchema = createInsertSchema(movies).omit({ id: true, createdAt: true });
 export const insertActorSchema = createInsertSchema(actors).omit({ id: true });
 export const insertCollectionSchema = createInsertSchema(collections).omit({ id: true });
+export const insertRegionalCollectionSchema = createInsertSchema(regionalCollections).omit({ id: true, updatedAt: true });
 
 // === EXPLICIT API CONTRACT TYPES ===
 export type User = typeof users.$inferSelect;
@@ -71,6 +84,9 @@ export type InsertActor = z.infer<typeof insertActorSchema>;
 
 export type Collection = typeof collections.$inferSelect;
 export type InsertCollection = z.infer<typeof insertCollectionSchema>;
+
+export type RegionalCollection = typeof regionalCollections.$inferSelect;
+export type InsertRegionalCollection = z.infer<typeof insertRegionalCollectionSchema>;
 
 // API Types
 export type MovieWithCollections = Movie & {
