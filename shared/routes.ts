@@ -62,6 +62,25 @@ export const api = {
   },
   // Auth Routes (Mocked)
   auth: {
+    signup: {
+      method: 'POST' as const,
+      path: '/api/auth/signup',
+      input: z.object({
+        email: z.string().email(),
+        password: z.string().min(6),
+      }),
+      responses: {
+        201: z.object({
+          user: z.object({
+            id: z.number(),
+            email: z.string(),
+            role: z.string(),
+            isPro: z.boolean(),
+          }),
+        }),
+        400: errorSchemas.validation,
+      },
+    },
     login: {
       method: 'POST' as const,
       path: '/api/auth/login',
