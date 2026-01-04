@@ -92,11 +92,18 @@ export default function ManageMovies() {
     setEditingMovie(null);
   };
 
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    if (!newOpen) {
+      setEditingMovie(null);
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-display font-bold">Manage Movies</h1>
-        <Dialog open={open} onOpenChange={handleDialogClose}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="w-4 h-4" /> Add Movie
