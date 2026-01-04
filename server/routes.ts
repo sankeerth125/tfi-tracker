@@ -34,6 +34,21 @@ export async function registerRoutes(
   };
 
   // === AUTH ROUTES ===
+  app.post(api.auth.signup.path, async (req, res) => {
+    try {
+      const { email, password } = api.auth.signup.input.parse(req.body);
+      const existing = await storage.getUserByEmail(email);
+      if (existing) {
+        return res.status(400).json({ message: "Email already registered" });
+      }
+      const user = await storage.createUser({ email, password, role: "user", isPro: false });
+      req.session.user = user;
+      res.status(201).json({ user: { id: user.id, email: user.email, role: user.role, isPro: user.isPro || false } });
+    } catch (err) {
+      res.status(400).json({ message: "Invalid input" });
+    }
+  });
+
   app.post(api.auth.login.path, async (req, res) => {
     try {
       const { email, password } = api.auth.login.input.parse(req.body);
