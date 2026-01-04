@@ -1,0 +1,250 @@
+You are a senior SaaS product designer + frontend engineer.
+
+Build a COMPLETE, production-quality web application UI for:
+
+"Tollywood Box Office Dashboard"
+
+This is a DATA-FIRST analytics product.
+Not social. Not news. Not reviews.
+
+================================
+CORE PRODUCT RULES
+================================
+
+- Read-only for public users
+- No login required for free usage
+- Login REQUIRED only for Pro users
+- Admin panel is INTERNAL only
+- Trust > engagement
+- Calm, professional UI
+
+Tech stack:
+- Next.js (App Router)
+- React + TypeScript
+- Tailwind CSS
+- Recharts
+- Dummy JSON data (hardcoded)
+- Stripe-style subscription UI (mocked)
+
+DO NOT:
+- Add comments
+- Add reviews
+- Add fan interactions
+- Add news feeds
+- Add ads
+- Add gamification
+
+================================
+PUBLIC APP SCREENS (MANDATORY)
+================================
+
+--------------------------------
+1) HOME / TODAY DASHBOARD
+--------------------------------
+
+(Default landing page)
+
+Top:
+- "Today at the Box Office"
+- Top 3 running movies cards:
+  - Poster
+  - Movie name
+  - Day X collection (₹)
+  - Trend arrow
+  - Status badge:
+    🔥 Strong | ⚠️ Dropping | 💀 Dead
+
+Middle:
+- "Today's Collections"
+- Sortable table:
+  - Movie
+  - Day
+  - India
+  - Overseas
+  - Total
+  - Trend
+
+Row click → Movie Detail
+
+Bottom:
+- "Upcoming Releases (Next 7 Days)"
+- Release date
+- Advance booking:
+  Low / Medium / High
+
+--------------------------------
+2) MOVIE DETAIL PAGE
+--------------------------------
+
+Header:
+- Poster
+- Title
+- Release date
+- Budget (estimated)
+- Verdict badge
+
+Collection Timeline:
+- Line chart (Day vs Collection)
+
+Collection Table:
+- Day | India | Overseas | Total | Source
+
+Verdict Panel:
+- Break-even
+- Collected
+- Status
+- Probability of Hit (%)
+
+Notes:
+- ONLY factual notes
+- No opinions
+
+--------------------------------
+3) COMPARE MOVIES PAGE
+--------------------------------
+
+- Select Movie A
+- Select Movie B
+
+Comparison:
+- Day 1
+- Weekend
+- Lifetime
+- Drop %
+- Overseas %
+
+Charts:
+- Side-by-side bars
+
+Pro-only advanced comparison:
+- Locked with soft blur + "Upgrade to Pro"
+
+--------------------------------
+4) STAR DASHBOARD
+--------------------------------
+
+Actor profile:
+- Photo
+- Career span
+- Total films
+
+Stats:
+- Avg opening
+- Highest grosser
+- Flop %
+- Hit streak
+
+Film list:
+- Movie | Opening | Verdict | Trend
+
+--------------------------------
+5) VERDICT RULES PAGE
+--------------------------------
+
+Text-based page:
+- Verdict logic explanation
+- Source definitions
+- Trade disclaimer
+
+--------------------------------
+6) PRO UPGRADE PAGE
+--------------------------------
+
+Purpose:
+Convert power users.
+
+Locked features:
+- Advanced comparison
+- Overseas breakdown
+- Historical data
+- Export (CSV/PNG)
+
+Pricing:
+- Monthly ₹149
+- Yearly ₹999
+
+CTA:
+- Upgrade to Pro
+
+On upgrade:
+- Prompt user to create account
+- Login form (email + password)
+- Mock Stripe checkout flow
+
+================================
+AUTHENTICATION RULES
+================================
+
+- Free users: NO LOGIN
+- Pro users:
+  - Email + password auth
+  - Simple session-based auth (mocked)
+  - Access control for Pro routes
+
+================================
+ADMIN PANEL (INTERNAL)
+================================
+
+Route:
+- /admin (no public link)
+
+Admin Authentication:
+- Hardcoded admin login (MVP)
+- Username + password
+
+Admin Screens:
+
+1) Admin Dashboard
+- Total movies
+- Active films
+- Last updated timestamp
+
+2) Movie Management
+- Add/Edit movie
+- Upload poster
+- Set budget
+- Assign stars
+
+3) Daily Collection Entry
+- Select movie
+- Enter day-wise collections
+- Assign source
+- Set confidence score
+
+4) Source Management
+- Add/edit sources
+- Credibility rating
+
+5) Verdict Rule Management
+- View rules
+- Edit formulas (text/JSON)
+
+6) Notes Editor
+- Add factual notes per movie
+
+================================
+DESIGN SYSTEM
+================================
+
+- Font: Inter
+- Clean spacing
+- Neutral greys
+- Minimal green/red highlights
+- No flashy gradients
+- Professional dashboards
+
+================================
+OUTPUT REQUIREMENTS
+================================
+
+- Full Next.js project
+- Proper routing
+- Reusable components
+- Admin + Public separation
+- Mock auth & subscription logic
+- Responsive (mobile-first)
+- NO PLACEHOLDER TEXT
+
+This UI must be SHIPPABLE as an MVP frontend.
+
+Begin implementation now.
